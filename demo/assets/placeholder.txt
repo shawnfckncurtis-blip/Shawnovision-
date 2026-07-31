@@ -1,0 +1,7 @@
+Placeholder assets folder.
+
+Add a curl-noise texture and short audio loops here when available.
+Recommended files:
+- noise_curl.png  (512x512)
+- slip_bass_loop.wav
+- whey_bubbles.wav
