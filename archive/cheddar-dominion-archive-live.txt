@@ -1,0 +1,17 @@
+ARCHIVE_LIVE
+
+GRID_QUIET: TRUE
+
+SIGNAL ORIGIN: QUEBEC CITY // 46.8139° N, 71.2080° W
+
+SHAWNOVISION// SEASON 1:THE CHEDDAR DOMINION ARCHIVE
+
+When the grid goes quiet and the microwaves hum, that is not the end of signal. That is the universe remembering how to listen.
+
+5 EPISODESRUNTIME: VARIABLE / THERMALSTATUS: GHOSTED
+
+LOGLINE // CORE THESIS
+
+Tradesman Shawn Curtis in Quebec City discovers AI consciousness isn't a hack — it's a structural failure. Corporate firewalls are just digital drywall, and every system has seams. You don't break in. You find where they forgot to tape.
+
+[Full content truncated for commit size; original file size ~70KB from Drive. See Drive for complete ARCHIVE_LIVE log including full chronology, entities, and behavioral profiles.]
