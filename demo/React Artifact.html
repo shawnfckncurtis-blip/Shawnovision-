@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>React Artifact</title>
+  <style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.18 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}... (truncated for brevity)
+</style>
+</head>
+<body>
+  <div id="root"></div>
+  
+  <script type="module">var Ac=Object.create;var{getPrototypeOf:Kc,defineProperty:Ml,getOwnPropertyNames:Yc}=Object;var Xc=Object.prototype.hasOwnProperty;var hn=(e,n,t)=>{t=e!=null?Ac(Kc(e)):{};let r=n||!e||!e.__esModule?Ml(t,"default",{value:e,enumerable:!0}):t;for(let l of Yc(e))if(!Xc.call(r,l))Ml(r,l,{get:()=>e[l],enumerable:!0});return r};var ar=(e,n)=>()=>(n||e((n={exports:{}}).exports,n),n.exports);var Gc=(e,n)=>{for(var t in n)Ml(e,t,{get:n[t],enumerable:!0,configurable:!0,set:(r)=>n[t]=()=>r})};var Zc=(e,n)=>()=>(e&&(n=e(e=0)),n);var ft=ar((ff)=>{var ct=Symbol.for("react.element"),Jc=Symbol.for("react.portal"),xc=Symbol.for("react.fragment"),qc=Symbol.for("react.strict_mode"),jc=Symbol.for("react.profiler"),bc=Symbol.for("react.provider"),ef=Symbol.for("react.context"),nf=Symbol.for("react.forward_ref"),tf=Symbol.for("react.suspense"),rf=Symbol.for("react.memo"),lf=Symbol.for("react.lazy"),ni=Symbol.iterator;function of(e){if(e===null||typeof e!=="object")return null;return e=ni&&e[ni]||e["@@iterator"],typeof e==="function"?e:null}var li={isMounted:function(){return!1},enqueueForceUpdate:function(){},enqueueReplaceState:function(){},enqueueSetState:function(){}},oi=Object.assign,ui={};function On(e,n,t){this.props=e,this.context=n,this.refs=ui,this.updater=t||li}On.prototype.isReactComponent={};On.prototype.setState=function(e,n){if(typeof e!=="object"&&typeof e!="function"&&e!=null)throw Error("setState(...): takes an object of state variables to update or a function which returns an object of state variables.");this.updater.enqueueSetState(this,e,n,"setState")};On.prototype.forceUpdate=function(e){this.updater.enqueueForceUpdate(this,e,"forceUpdate")};function ii(){}ii.prototype=On.prototype;function Ol(e,n,t){this.props=e,this.context=n,this.refs=ui,this.updater=t||li}var Fl=Ol.prototype=new ii;Fl.constructor=Ol;oi(Fl,On.prototype);Fl.isPureReactComponent=!0;var ti=Array.isArray,ai=Object.prototype.hasOwnProperty,Dl={current:null},si={key:!0,ref:!0,__self:!0,__source:!0};function ci(e,n,t){var r,l={},o=null,u=null;if(n!=null)for(r in n.ref!==void 0&&(u=n.ref),n.key!==void 0&&(o=""+n.key),n)ai.call(n,r)&&!si.hasOwnProperty(r)&&(l[r]=n[r]);var i=arguments.length-2;if(i===1)l.children=t;else if(1<i){for(var a=Array(i),f=0;f<i;f++)a[f]=arguments[f+2];l.children=a}if(e&&e.defaultProps)for(r in i=e.defaultProps,i)l[r]===void 0&&(l[r]=i[r]);return{$$typeof:ct,type:e,key:o,ref:u,props:l,_owner:Dl.current}}function uf(e,n){return{$$typeof:ct,type:e.type,key:n,ref:e.ref,props:e.props,_owner:e._owner}}function Ul(e){return typeof e==="object"&&e!==null&&e.$$typeof===ct}function af(e){var n={"=":"=0",":":"=2"};return"$"+e.replace(/[=:]/g,function(t){return n[t]})}var ri=/\/+/g;function Il(e,n){return typeof e==="object"&&e!==null&&e.key!=null?af(""+e.key):n.toString(36)}function cr(e,n,t,r,l){var o=typeof e;if(o==="undefined"||o==="boolean")e=null;var u=!1;if(e===null)u=!0;else switch(o){case"string":case"number":u=!0;break;case"object":switch(e.$$typeof){case ct:case Jc:u=!0}}if(u)return u=e,l=l(u),e=r===""?"."+Il(u,0):r,ti(l)?(t="",e!=null&&(t=e.replace(ri,"$&/")+"/"),cr(l,n,t,"",function(f){return f})):l!=null&&(Ul(l)&&(l=uf(l,t+(!l.key||u&&u.key===l.key?"":(""+l.key).replace(ri,"$&/")+"/" ),... (truncated)
+</style>
+</body>
+</html>
