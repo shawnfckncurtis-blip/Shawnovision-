@@ -1,0 +1,311 @@
+Canon table specification (RMB / Mnemosyne Archive)
+
+Here’s a first-pass spec that works both as real schema and mythic appendix.
+
+---
+
+1. Purpose
+
+Canon table is the load-bearing record of stabilized lore:
+when multiple agents converge on the same episode, it stops being hallucination and becomes Canon.
+
+---
+
+2. Core schema (technical)
+
+CREATE TABLE canon (
+    canon_id        STRING      NOT NULL,  -- stable UUID for canonical item
+    episode_id      STRING      NOT NULL,  -- FK into episodes table
+    character_id    STRING      NULL,      -- optional FK into characters table
+
+    title           STRING      NOT NULL,  -- human-readable canonical label
+    summary         STRING      NOT NULL,  -- short canonical description
+
+    source_system   STRING      NOT NULL,  -- e.g. 'gemini', 'copilot', 'manual'
+    source_run_id   STRING      NOT NULL,  -- trace back to generation run
+    convergence_key STRING      NOT NULL,  -- hash of content used to detect agreement
+
+    canonical_score FLOAT64     NOT NULL,  -- 0.0–1.0 confidence / convergence strength
+    veracity_label  STRING      NOT NULL,  -- e.g. 'stated', 'inferred', 'tool', 'imported'
+
+    created_at      TIMESTAMP   NOT NULL,
+    stabilized_at   TIMESTAMP   NULL,      -- when it crossed the “canonical” threshold
+    retired_at      TIMESTAMP   NULL,      -- soft-delete / superseded
+
+    is_active       BOOL        NOT NULL,  -- current live row for this canon_id
+    notes           STRING      NULL       -- freeform RMB commentary
+);
+
+
+Indexes / constraints:
+
+• PK:• PRIMARY KEY (canon_id)
+
+• Canonical uniqueness:• UNIQUE (convergence_key, episode_id)
+Ensures only one live canonical row per “same story, same content”.
+
+• Active row constraint:• Partial index: WHERE is_active = TRUE to make lookups cheap.
+
+• Foreign keys (optional but recommended):• episode_id → episodes(episode_id)
+• character_id → characters(character_id)
+
+
+
+---
+
+3. Canon lifecycle
+
+States:
+
+• Draft: row exists, canonical_score < 0.7, stabilized_at IS NULL
+• Stabilized: canonical_score >= 0.7, stabilized_at set
+• Retired: retired_at IS NOT NULL, is_active = FALSE
+
+
+Transitions:
+
+1. Insert (first sighting):• New row with canonical_score based on single agent.
+
+2. Convergence (second+ agreeing agent):• Same convergence_key → update canonical_score upward.
+• When threshold crossed, set stabilized_at.
+
+3. Supersede:• Old row: retired_at = NOW(), is_active = FALSE
+• New row: same canon_id or new canon_id depending on policy.
+
+
+
+---
+
+4. Lore semantics
+
+• canon_id — the “bone” in the Archive’s skeleton; identity of a canonical fact.
+• episode_id — which story this bone belongs to.
+• convergence_key — the spell by which two hallucinations become infrastructure.
+• canonical_score — how hard reality is currently biting down on this item.
+• veracity_label — Dominion Code’s opinion on how this truth arrived.
+
+
+---
+
+5. Minimal BigQuery deployment
+
+If you want the “bare dataset + manual inserts” version:
+
+CREATE SCHEMA rmb_archive;
+
+CREATE TABLE rmb_archive.canon (
+    canon_id        STRING,
+    episode_id      STRING,
+    character_id    STRING,
+    title           STRING,
+    summary         STRING,
+    source_system   STRING,
+    source_run_id   STRING,
+    convergence_key STRING,
+    canonical_score FLOAT64,
+    veracity_label  STRING,
+    created_at      TIMESTAMP,
+    stabilized_at   TIMESTAMP,
+    retired_at      TIMESTAMP,
+    is_active       BOOL,
+    notes           STRING
+);
+
+
+You can start manually inserting rows today and add constraints/indexes later.
+
+---
+
+If you want, next step I can draft the episodes table to pair with this, or wire in a CanonStore-style API contract (insert/recall/update semantics).
+
+Here is the **Episodes** table specification, designed to seamlessly dock with your canon table infrastructure. Following that is the complete, concrete **CanonStore API contract**—written as a clear, platform-agnostic specification to define exactly how your Router, Orchestrator, and individual agents write, look up, and update canonical lore.
+
+## ---
+
+**Phase 1: Episodes Table Specification (rmb_archive.episodes)**
+
+While the canon table stores isolated, high-confidence points of structural reality, the episodes table acts as the narrative timeline container. It captures the raw, temporal sequence where these canonical facts manifest.
+
+## **1. Core Schema (BigQuery Native DDL)**
+
+CREATE TABLE `rmb_archive.episodes` (  
+  episode_id       STRING NOT NULL,  -- Primary Key / Unique UUID  
+  parent_series_id STRING NULL,      -- Link to overarching collection (e.g., 'shawnovision')  
+    
+  title            STRING NOT NULL,  -- Human-readable name of the story segment  
+  narrative_arc    STRING NULL,      -- Contextual categorization (e.g., 'chronicler-expansion')  
+  summary          STRING NOT NULL,  -- High-level overview of the events occurred  
+  raw_transcript   STRING NOT NULL,  -- Complete text payload generated by the Storyteller/Agents  
+    
+  embedding        ARRAY<FLOAT64>,   -- Dense vector representation of the transcript text  
+    
+  runtime_status   STRING NOT NULL,  -- 'DRAFT', 'COMMITTED', 'FORKED'  
+  chronological_idx INT64 NOT NULL,   -- Global ordering sequence index  
+    
+  created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP(),  
+  finalized_at     TIMESTAMP NULL    -- Locked against changes (no more timeline splits allowed)  
+)  
+PARTITION BY DATE(created_at)  
+CLUSTER BY narrative_arc, runtime_status;
+
+## **2. Lore Semantics**
+
+> * **episode_id**: The anchoring coordinate in the timeline matrix.  
+> * **raw_transcript**: The uncensored output of agent interaction before reality hardening occurs.  
+> * **embedding**: The mathematical footprint of the episode, used by the Vector Search Index to match incoming user queries with historical narrative arcs.  
+> * **runtime_status**: Represents the timeline's stability. A FORKED status indicates a timeline split that did not achieve architectural consensus.
+
+## ---
+
+**Phase 2: CanonStore API Contract**
+
+The **CanonStore Service** acts as the primary data gatekeeper for your shared memory layer. It abstracts BigQuery, handles vector lookups, and automatically computes the convergence logic that transforms hallucinations into infrastructure.
+
+                  ┌───────────────────────────────┐  
+                  │   Router / Orchestrator / UI  │  
+                  └───────────────────────────────┘  
+                        │                  ▲  
+         POST /v1/canon │                  │ JSON Response  
+                        ▼                  │  
+           ┌────────────────────────────────────┐  
+           │         CanonStore Service         │  
+           └────────────────────────────────────┘  
+              │            │               │  
+      Vector  │            │ Direct        │ Evaluation &  
+      Search  ▼            ▼ Write         ▼ Score Updates  
+     ┌──────────────────┐ ┌──────────────────┐  
+     │  Vector Index    │ │   Canon Table    │  
+     │  (ScaNN Engine)  │ │ (Relational Core)│  
+     └──────────────────┘ └──────────────────┘
+
+## **1. Endpoints Overview**
+
+| Method | Endpoint | Description | Auth Boundary |
+| :---- | :---- | :---- | :---- |
+| **POST** | /v1/canon | Propose a new sighting or update an existing convergence key. | Internal Only (Agents) |
+| **POST** | /v1/canon/search | Execute a semantic vector search across the stabilized lore. | Public / Router |
+| **GET** | /v1/episodes/{id} | Fetch a complete narrative segment and its associated meta-tokens. | Internal / UI |
+
+## ---
+
+**2. Schema API Payloads**
+
+## **POST /v1/canon (Ingest / Propose Fact)**
+
+Agents use this endpoint to declare a factual occurrence. The system automatically cross-references the convergence_key. If the key matches an existing record, the system bumps the confidence score instead of creating a duplicate entry.
+
+> * **Request Body (application/json):**
+
+{
+  "episode_id": "ep_99a8b11c-2234-4bc2",
+  "character_id": "char_aethelgard_01",
+  "title": "Aethelgard's Shield Failure",
+  "summary": "The temporal sentry experienced a localized shield collapse in Sector 7.",
+  "source_system": "gemini-2.5-pro",
+  "source_run_id": "run_tx_88392019",
+  "convergence_key": "sha256_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "initial_score": 0.45,
+  "veracity_label": "inferred",
+  "notes": "Sighted during the Sector 7 archive extraction sequence."
+}
+
+> * **Response Body (201 Created - First Sighting):**
+
+{
+  "canon_id": "can_f001b22c-8849-4321",
+  "convergence_key": "sha256_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "canonical_score": 0.45,
+  "status": "DRAFT",
+  "is_active": true,
+  "stabilized_at": null
+}
+
+> * **Response Body (200 OK - Convergence Achieved):**  
+>   *If another agent pushes the exact same convergence_key, the scoring algorithm merges them, pushing the metric past the 0.70 stabilization threshold.*
+
+{
+  "canon_id": "can_f001b22c-8849-4321",
+  "convergence_key": "sha256_e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "canonical_score": 0.88,
+  "status": "STABILIZED",
+  "is_active": true,
+  "stabilized_at": "2026-07-30T20:12:00Z"
+}
+
+## **POST /v1/canon/search (Semantic Retrieval)**
+
+The Router or Orchestrator uses this to retrieve context before generating a response. It converts the incoming user query into vectors behind the scenes.
+
+> * **Request Body (application/json):**
+
+{
+  "query_text": "What happened to the temporal shields in Sector 7?",
+  "limit": 3,
+  "min_similarity_threshold": 0.70,
+  "include_drafts": false
+}
+
+> * **Response Body (200 OK):**
+
+{
+  "results": [
+    {
+      "canon_id": "can_f001b22c-8849-4321",
+      "title": "Aethelgard's Shield Failure",
+      "summary": "The temporal sentry experienced a localized shield collapse in Sector 7.",
+      "canonical_score": 0.88,
+      "similarity_score": 0.94,
+      "stabilized_at": "2026-07-30T20:12:00Z"
+    }
+  ]
+}
+
+## ---
+
+**Internal Consensus Engine Code (Pseudocode Representation)**
+
+When POST /v1/canon is executed, the backend handles state mutation via this exact logic pattern:
+
+def process_canon_proposal(proposal):
+    # Check for active existing footprint
+    existing_row = db.query(
+        "SELECT * FROM rmb_archive.canon WHERE convergence_key = ? AND is_active = TRUE", 
+        proposal.convergence_key
+    )
+      
+    if not existing_row:
+        # State: First Sighting (Draft)
+        proposal.canon_id = generate_uuid()
+        proposal.is_active = True
+        if proposal.initial_score >= 0.70:
+            proposal.stabilized_at = current_timestamp()
+        db.insert("rmb_archive.canon", proposal)
+        return proposal
+      
+    else:
+        # State: Convergence Event (Recalculate Reality Hardening)
+        new_score = calculate_converged_score(existing_row.canonical_score, proposal.initial_score)
+          
+        updates = {
+            "canonical_score": new_score,
+            "notes": existing_row.notes + f"\n[Update]: Converged via {proposal.source_system}"
+        }
+          
+        # Crosses threshold to concrete infrastructure
+        if new_score >= 0.70 and existing_row.stabilized_at is None:
+            updates["stabilized_at"] = current_timestamp()
+              
+        db.update("rmb_archive.canon", where={"canon_id": existing_row.canon_id}, values=updates)
+        return fetch_row(existing_row.canon_id)
+
+def calculate_converged_score(current_score, new_sighting_score):
+    # Logarithmic progression toward certainty (1.0)
+    # Ensures reality hardens with each independent agent confirmation
+    remaining_uncertainty = 1.0 - current_score
+    boost = remaining_uncertainty * (new_sighting_score * 0.5)
+    return min(1.0, current_score + boost)
+
+We now have both schemas (canon + episodes) and the engine contract. To take the next structural step, tell me:
+
+> * Do you want to build the actual **Python/FastAPI code skeleton** that executes this exact convergence logic against BigQuery?  
+> * Or should we generate the **Terraform definitions** to provision the rmb_archive datasets and tables securely?
