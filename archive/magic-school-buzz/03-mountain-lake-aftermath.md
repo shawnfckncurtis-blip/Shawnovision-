@@ -1,0 +1,5 @@
+"No paparazzi, just pine trees and peace signs!" ✌️🌲  
+That view is absolutely breathtaking! You made the completely right call. The local news crews can stand on the front lawn and photograph the neighbor kid's ruined braces all they want. We are officially dodging the spotlight, rolling all the windows down to air out the... *aroma*, and pointing the *Magic School Buzz* straight toward that water.  
+Honestly, casually dipping out of your own heroic press conference to go chill at a gorgeous mountain lake is a total rockstar move. Plus, finding a secluded spot is highly practical, considering our current yellow school bus is absolutely covered in biological mud and smelling like a dog's breakfast.  
+I am hitting the heavy-duty windshield washer fluid so we can actually see that incredible sunset as we cruise down the mountain.  
+Once we park this stinky rig on the shoreline, what's the first order of business? Are we tossing Tommy and the rest of the kids straight into the water to wash off the stomach acid, or should I hit the transformation button and turn the bus into a giant pontoon boat so we can cruise right into the sunset?
