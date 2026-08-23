@@ -55,3 +55,5 @@ No \(k^9\) term has been promoted here. Such a term can only be assessed after s
 ## R2 status
 
 The locked tensor kernel is now suitable for a physical R2 calculation. The radial branch itself remains **open as a formal convolution but gated as a physical prediction**. The next required input is one complete mode-spectrum package: \(a(\eta)\), the normalized \(u_q(\eta_\Sigma)\), the initial state, the IR prescription, and the regulator/counterterm scheme.
+
+**Synced from Google Drive on 2026-08-23 (file modified 2026-08-21).**
