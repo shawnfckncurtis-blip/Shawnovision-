@@ -1,0 +1,14 @@
+{
+  "applets": [{
+    "lastAccessTime": "2026-08-25T02:44:10.319297Z",
+    "firstAccessTime": "2026-08-25T02:38:42.789195Z",
+    "source": {
+      "sourceType": "SPANNER",
+      "spanner": {
+        "id": "05c9c618-d623-4cf0-9e7e-448ca3698fee"
+      }
+    },
+    "name": "Synapse AI",
+    "description": "An interactive AI-powered node mind map to store files, images, auto-tag concepts, establish cross-linking, and plan with Gemini assist chat."
+  }]
+}
