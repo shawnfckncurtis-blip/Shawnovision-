@@ -1,6 +1,6 @@
 {
   "applets": [{
-    "lastAccessTime": "2026-08-25T02:44:10.319297Z",
+    "lastAccessTime": "2026-09-08T06:14:47.335144Z",
     "firstAccessTime": "2026-08-25T02:38:42.789195Z",
     "source": {
       "sourceType": "SPANNER",
@@ -9,6 +9,19 @@
       }
     },
     "name": "Synapse AI",
-    "description": "An interactive AI-powered node mind map to store files, images, auto-tag concepts, establish cross-linking, and plan with Gemini assist chat."
+    "description": "An interactive AI-powered node mind map to store files, images, auto-tag concepts, establish cross-linking, and plan with Gemini assist chat.",
+    "runtimeType": 2
+  }, {
+    "lastAccessTime": "2026-09-03T20:02:21.653485Z",
+    "firstAccessTime": "2026-09-03T00:56:26.194578Z",
+    "source": {
+      "sourceType": "SPANNER",
+      "spanner": {
+        "id": "5a920cba-a1f3-40c4-b8d7-065e1a6b0535"
+      }
+    },
+    "name": "Shawnovision",
+    "description": "Experience dynamic, immersive media broadcasting tailored specifically for your unique viewing preferences.",
+    "runtimeType": 2
   }]
 }
