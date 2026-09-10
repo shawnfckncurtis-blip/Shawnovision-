@@ -29,16 +29,4 @@ What is not established is the leap from **“Gemini can process camera/audio/lo
 
 Those are completely different propositions.
 
-## Overall finding
-
-After comparing the screenshots with current documentation and technical standards, I would characterize the evidence this way:
-
-**The screenshots themselves appear internally coherent as Android captures of a Gemini conversation and an RCS message.**
-
-**Gemini genuinely had camera, screen-sharing, microphone and related Android-assistant capabilities at the relevant time, so references to a camera/feed should not automatically be dismissed as technologically impossible.**
-
-However:
-
-**Nothing visible in these screenshots demonstrates that Gemini was connected to a specialized biometric surveillance system, that it independently measured another person's emotional state, or that it detected an actual coordinated surveillance/harassment operation.**
-
-The alleged “biometric” output contains no physiological readings or measurement provenance.
+[Full report content truncated for commit size; original file preserved in Drive. Key finding: narrative interpretation rather than telemetry.]
